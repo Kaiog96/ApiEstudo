@@ -1,6 +1,8 @@
+using ApiEstudo.Business;
+using ApiEstudo.Business.Implementations;
 using ApiEstudo.Model.Context;
-using ApiEstudo.Services;
-using ApiEstudo.Services.Implementations;
+using ApiEstudo.Repository;
+using ApiEstudo.Repository.Implementations;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,7 +15,8 @@ builder.Services.AddDbContext<MysqlContext>(options => options.UseMySql(connecti
 
 builder.Services.AddApiVersioning();
 
-builder.Services.AddScoped<IPersonService, PersonServiceImplementation>();
+builder.Services.AddScoped<IPersonBusiness, PersonBusinessImplementation>();
+builder.Services.AddScoped<IPersonRepository, PersonRepositoryImplementation>();
 
 var app = builder.Build();
 

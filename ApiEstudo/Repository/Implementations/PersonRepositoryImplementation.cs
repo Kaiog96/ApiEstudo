@@ -1,15 +1,14 @@
-﻿namespace ApiEstudo.Services.Implementations
+﻿namespace ApiEstudo.Repository.Implementations
 {
     using ApiEstudo.Model;
     using ApiEstudo.Model.Context;
-    using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
     using System;
 
-    public class PersonServiceImplementation : IPersonService
+    public class PersonRepositoryImplementation : IPersonRepository
     {
         private MysqlContext _context;
 
-        public PersonServiceImplementation(MysqlContext context)
+        public PersonRepositoryImplementation(MysqlContext context)
         {
            _context = context;
         }
@@ -82,7 +81,7 @@
             }
         }
 
-        private bool Exists(long id)
+        public bool Exists(long id)
         {
             return _context.Persons.Any(p => p.Id.Equals(id));
         }

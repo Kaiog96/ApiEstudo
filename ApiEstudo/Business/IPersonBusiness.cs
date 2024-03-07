@@ -1,8 +1,8 @@
-﻿namespace ApiEstudo.Services
+﻿namespace ApiEstudo.Business
 {
     using ApiEstudo.Model;
 
-    public interface IPersonService
+    public interface IPersonBusiness
     {
         List<Person> FindAll();
 
