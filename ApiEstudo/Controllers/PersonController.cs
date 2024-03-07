@@ -2,10 +2,12 @@ namespace ApiEstudo.Controllers
 {
     using ApiEstudo.Model;
     using ApiEstudo.Services;
+    using Asp.Versioning;
     using Microsoft.AspNetCore.Mvc;
 
     [ApiController]
-    [Route("api/[controller]")]
+    [ApiVersion("1")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     public class PersonController : ControllerBase
     { 
         private readonly ILogger<PersonController> _logger;
