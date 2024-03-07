@@ -1,9 +1,7 @@
 ﻿namespace ApiEstudo.Business.Implementations
 {
     using ApiEstudo.Model;
-    using ApiEstudo.Model.Context;
     using ApiEstudo.Repository;
-    using System;
 
     public class PersonBusinessImplementation : IPersonBusiness
     {
