@@ -2,7 +2,7 @@ using ApiEstudo.Business;
 using ApiEstudo.Business.Implementations;
 using ApiEstudo.Model.Context;
 using ApiEstudo.Repository;
-using ApiEstudo.Repository.Implementations;
+using ApiEstudo.Repository.Generic;
 using EvolveDb;
 using Microsoft.EntityFrameworkCore;
 using MySqlConnector;
@@ -24,9 +24,8 @@ if (builder.Environment.IsDevelopment())
 builder.Services.AddApiVersioning();
 
 builder.Services.AddScoped<IPersonBusiness, PersonBusinessImplementation>();
-builder.Services.AddScoped<IPersonRepository, PersonRepositoryImplementation>();
 builder.Services.AddScoped<IBookBusiness, BookBusinessImplementation>();
-builder.Services.AddScoped<IBookRepository, BookRepositoryImplementation>();
+builder.Services.AddScoped(typeof (IRepository<>), typeof(GenericRepository<>));
 
 var app = builder.Build();
 
