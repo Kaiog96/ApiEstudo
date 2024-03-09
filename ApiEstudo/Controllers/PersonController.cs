@@ -1,7 +1,7 @@
 namespace ApiEstudo.Controllers
 {
     using ApiEstudo.Business;
-    using ApiEstudo.Model;
+    using ApiEstudo.Data.VO;
     using Asp.Versioning;
     using Microsoft.AspNetCore.Mvc;
 
@@ -36,20 +36,20 @@ namespace ApiEstudo.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody] Person person)
+        public IActionResult Post([FromBody] PersonVO personVO)
         {
-            if (person == null) { return BadRequest(); }
+            if (personVO == null) { return BadRequest(); }
 
-            return Ok(_personBusiness.Create(person));
+            return Ok(_personBusiness.Create(personVO));
         }
 
 
         [HttpPut]
-        public IActionResult Put([FromBody] Person person)
+        public IActionResult Put([FromBody] PersonVO personVO)
         {
-            if (person == null) { return BadRequest(); }
+            if (personVO == null) { return BadRequest(); }
 
-            return Ok(_personBusiness.Update(person));
+            return Ok(_personBusiness.Update(personVO));
         }
 
         [HttpDelete("{id}")]

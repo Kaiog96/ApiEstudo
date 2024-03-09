@@ -1,5 +1,7 @@
 ﻿namespace ApiEstudo.Business.Implementations
 {
+    using ApiEstudo.Data.Converter.Implementations;
+    using ApiEstudo.Data.VO;
     using ApiEstudo.Model;
     using ApiEstudo.Repository;
 
@@ -7,29 +9,40 @@
     {
         private readonly IRepository<Book> _bookRepository;
 
+        private readonly BookConverter _converter;
+
         public BookBusinessImplementation(IRepository<Book> bookRepository)
         {
             _bookRepository = bookRepository;
+            _converter = new BookConverter();
         }
 
-        public List<Book> FindAll()
+        public List<BookVO> FindAll()
         {
-            return _bookRepository.FindAll();
+            return _converter.Parse(_bookRepository.FindAll());
         }
 
-        public Book FindByID(long id)
+        public BookVO FindByID(long id)
         {
-            return _bookRepository.FindByID(id);
+            return _converter.Parse(_bookRepository.FindByID(id));
         }
 
-        public Book Create(Book book)
+        public BookVO Create(BookVO bookVO)
         {
-            return _bookRepository.Create(book);
+            var bookEntity = _converter.Parse(bookVO);
+
+            bookEntity = _bookRepository.Create(bookEntity);
+
+            return _converter.Parse(bookEntity);
         }
 
-        public Book Update(Book book)
+        public BookVO Update(BookVO bookVO)
         {
-            return _bookRepository.Update(book);
+            var bookEntity = _converter.Parse(bookVO);
+
+            bookEntity = _bookRepository.Update(bookEntity);
+
+            return _converter.Parse(bookEntity);
         }
 
         public void Delete(long id)

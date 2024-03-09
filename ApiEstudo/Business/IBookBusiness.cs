@@ -1,16 +1,16 @@
 ﻿namespace ApiEstudo.Business
 {
-    using ApiEstudo.Model;
+    using ApiEstudo.Data.VO;
 
     public interface IBookBusiness
     {
-        List<Book> FindAll();
+        List<BookVO> FindAll();
 
-        Book FindByID(long id);
+        BookVO FindByID(long id);
 
-        Book Create(Book book);
+        BookVO Create(BookVO bookVO);
 
-        Book Update(Book book);
+        BookVO Update(BookVO bookVO);
 
         void Delete(long id);
     }

@@ -1,16 +1,16 @@
 ﻿namespace ApiEstudo.Business
 {
-    using ApiEstudo.Model;
+    using ApiEstudo.Data.VO;
 
     public interface IPersonBusiness
     {
-        List<Person> FindAll();
+        List<PersonVO> FindAll();
 
-        Person FindByID(long id);
+        PersonVO FindByID(long id);
 
-        Person Create(Person person);
+        PersonVO Create(PersonVO personVO);
 
-        Person Update(Person person);
+        PersonVO Update(PersonVO personVO);
 
         void Delete(long id);
     }

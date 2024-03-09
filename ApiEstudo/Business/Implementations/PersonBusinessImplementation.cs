@@ -1,5 +1,7 @@
 ﻿namespace ApiEstudo.Business.Implementations
 {
+    using ApiEstudo.Data.Converter.Implementations;
+    using ApiEstudo.Data.VO;
     using ApiEstudo.Model;
     using ApiEstudo.Repository;
 
@@ -7,29 +9,40 @@
     {
         private readonly IRepository<Person> _personRepository;
 
+        private readonly PersonConverter _converter;
+
         public PersonBusinessImplementation(IRepository<Person> personRepository)
         {
             _personRepository = personRepository;
+            _converter = new PersonConverter();
         }
 
-        public List<Person> FindAll()
+        public List<PersonVO> FindAll()
         {
-            return _personRepository.FindAll();
+            return _converter.Parse(_personRepository.FindAll());
         }
 
-        public Person FindByID(long id)
+        public PersonVO FindByID(long id)
         {
-            return _personRepository.FindByID(id);
+            return _converter.Parse(_personRepository.FindByID(id));
         }
 
-        public Person Create(Person person)
+        public PersonVO Create(PersonVO personVO)
         {
-            return _personRepository.Create(person);
+            var personEntity = _converter.Parse(personVO);
+
+            personEntity = _personRepository.Create(personEntity);
+
+            return _converter.Parse(personEntity);
         }
 
-        public Person Update(Person person)
+        public PersonVO Update(PersonVO personVO)
         {
-            return _personRepository.Update(person);
+            var personEntity = _converter.Parse(personVO);
+
+            personEntity = _personRepository.Update(personEntity);
+
+            return _converter.Parse(personEntity);
         }      
 
         public void Delete(long id)
