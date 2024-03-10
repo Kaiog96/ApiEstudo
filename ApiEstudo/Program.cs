@@ -1,12 +1,17 @@
 using ApiEstudo.Business;
 using ApiEstudo.Business.Implementations;
+using ApiEstudo.Extensions;
 using ApiEstudo.Hypermedia.Enricher;
 using ApiEstudo.Hypermedia.Filters;
 using ApiEstudo.Model.Context;
 using ApiEstudo.Repository;
 using ApiEstudo.Repository.Generic;
 using EvolveDb;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Formatters;
+using Microsoft.AspNetCore.Rewrite;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 using MySqlConnector;
 using Serilog;
 
@@ -23,16 +28,47 @@ if (builder.Environment.IsDevelopment())
     MigrateDatabase(connection);
 }
 
-builder.Services.AddApiVersioning();
-
 builder.Services.AddScoped<IPersonBusiness, PersonBusinessImplementation>();
 builder.Services.AddScoped<IBookBusiness, BookBusinessImplementation>();
 builder.Services.AddScoped(typeof (IRepository<>), typeof(GenericRepository<>));
 
 var filterOptions = new HyperMediaFilterOptions();
 filterOptions.ContentResponseEnricherList.Add(new PersonEnricher());
+filterOptions.ContentResponseEnricherList.Add(new BookEnricher());
 
-builder.Services.AddSingleton(filterOptions);	
+builder.Services.AddSingleton(filterOptions);
+
+builder.Services.AddRouting(options => options.LowercaseUrls = true);
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen(c =>
+{
+	c.SwaggerDoc("v1",
+		new OpenApiInfo
+		{
+			Title = "API for studying in ASP.NET Core 8 with Docker",
+			Version = "v1",
+			Description = "API RESTful for studying",
+			Contact = new OpenApiContact
+			{
+				Name = "Kaio Aime Garcia",
+				Url = new Uri("https://github.com/Kaiog96")
+			}
+        });
+});
+
+builder.Services.AddMvc(opt =>
+{
+    opt.UseCentralRoutePrefix(new RouteAttribute("api/v1"));
+
+    opt.EnableEndpointRouting = false;
+
+    var noContentFormatter = opt.OutputFormatters.OfType<HttpNoContentOutputFormatter>().FirstOrDefault();
+
+    if (noContentFormatter != null)
+    {
+        noContentFormatter.TreatNullValueAsNoContent = false;
+    }
+});
 
 var app = builder.Build();
 
@@ -42,7 +78,18 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.MapControllerRoute("DefaultApi", "{controller=values}/{id?}");
+app.MapControllerRoute("DefaultApi", "api/{controller}/{id?}");
+
+app.UseSwagger();
+
+app.UseSwaggerUI(c =>
+{
+	c.SwaggerEndpoint("/swagger/v1/swagger.json", "API for studying in ASP.NET Core 8 with Docker v1");
+});
+
+var option = new RewriteOptions();
+option.AddRedirect("^$", "swagger");
+app.UseRewriter(option);
 
 app.Run();
 

@@ -4,13 +4,12 @@
     using ApiEstudo.Hypermedia.Constants;
     using Microsoft.AspNetCore.Mvc;
     using System.Text;
-    using System.Threading.Tasks;
 
-    public class PersonEnricher : ContentResponseEnricher<PersonVO>
+    public class BookEnricher : ContentResponseEnricher<BookVO>
     {
-        protected override Task EnrichModel(PersonVO content, IUrlHelper urlHelper)
+        protected override Task EnrichModel(BookVO content, IUrlHelper urlHelper)
         {
-            var path = "api/book";
+            var path = "api/person";
 
             string link = GetLink(content.Id, urlHelper, path);
 

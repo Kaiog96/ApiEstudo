@@ -2,12 +2,10 @@
 {
     using ApiEstudo.Business;
     using ApiEstudo.Data.VO;
-    using Asp.Versioning;
+    using ApiEstudo.Hypermedia.Filters;
     using Microsoft.AspNetCore.Mvc;
 
     [ApiController]
-    [ApiVersion("1")]
-    [Route("api/v{version:apiVersion}/[controller]")]
     public class BookController : ControllerBase
     {
         private readonly ILogger<BookController> _logger;
@@ -20,12 +18,24 @@
         }
 
         [HttpGet]
+        [Route("Book", Name = "GetBooks")]
+        [ProducesResponseType((200), Type = typeof(List<BookVO>))]
+        [ProducesResponseType((204))]
+        [ProducesResponseType((400))]
+        [ProducesResponseType((401))]
+        [TypeFilter (typeof(HyperMediaFilter))]
         public IActionResult Get()
         {
             return Ok(_bookBusiness.FindAll());
         }
 
-        [HttpGet("{id}")]
+        [HttpGet]
+        [Route("Book/{id}", Name = "GetBook")]
+        [ProducesResponseType((200), Type = typeof(BookVO))]
+        [ProducesResponseType((204))]
+        [ProducesResponseType((400))]
+        [ProducesResponseType((401))]
+        [TypeFilter(typeof(HyperMediaFilter))]
         public IActionResult GetFindByID(long id)
         {
             var book = _bookBusiness.FindByID(id);
@@ -36,6 +46,11 @@
         }
 
         [HttpPost]
+        [Route("Book", Name = "PostBook")]
+        [ProducesResponseType((200), Type = typeof(BookVO))]
+        [ProducesResponseType((400))]
+        [ProducesResponseType((401))]
+        [TypeFilter(typeof(HyperMediaFilter))]
         public IActionResult Post([FromBody] BookVO bookVO)
         {
             if (bookVO == null) { return BadRequest(); }
@@ -43,8 +58,12 @@
             return Ok(_bookBusiness.Create(bookVO));
         }
 
-
         [HttpPut]
+        [Route("Book", Name = "PutBook")]
+        [ProducesResponseType((200), Type = typeof(BookVO))]
+        [ProducesResponseType((400))]
+        [ProducesResponseType((401))]
+        [TypeFilter(typeof(HyperMediaFilter))]
         public IActionResult Put([FromBody] BookVO bookVO)
         {
             if (bookVO == null) { return BadRequest(); }
@@ -52,7 +71,11 @@
             return Ok(_bookBusiness.Update(bookVO));
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete]
+        [Route("Book/{id}", Name = "DeleteBook")]
+        [ProducesResponseType((204))]
+        [ProducesResponseType((400))]
+        [ProducesResponseType((401))]
         public IActionResult Delete(long id)
         {
             _bookBusiness.Delete(id);
