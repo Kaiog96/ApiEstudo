@@ -1,5 +1,7 @@
 using ApiEstudo.Business;
 using ApiEstudo.Business.Implementations;
+using ApiEstudo.Hypermedia.Enricher;
+using ApiEstudo.Hypermedia.Filters;
 using ApiEstudo.Model.Context;
 using ApiEstudo.Repository;
 using ApiEstudo.Repository.Generic;
@@ -27,6 +29,11 @@ builder.Services.AddScoped<IPersonBusiness, PersonBusinessImplementation>();
 builder.Services.AddScoped<IBookBusiness, BookBusinessImplementation>();
 builder.Services.AddScoped(typeof (IRepository<>), typeof(GenericRepository<>));
 
+var filterOptions = new HyperMediaFilterOptions();
+filterOptions.ContentResponseEnricherList.Add(new PersonEnricher());
+
+builder.Services.AddSingleton(filterOptions);	
+
 var app = builder.Build();
 
 app.UseHttpsRedirection();
@@ -34,6 +41,8 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapControllerRoute("DefaultApi", "{controller=values}/{id?}");
 
 app.Run();
 

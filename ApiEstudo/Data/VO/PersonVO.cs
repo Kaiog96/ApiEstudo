@@ -1,6 +1,11 @@
-﻿namespace ApiEstudo.Data.VO
+﻿
+namespace ApiEstudo.Data.VO
 {
-    public class PersonVO 
+    using ApiEstudo.Hypermedia;
+    using ApiEstudo.Hypermedia.Abstract;
+    using System.Collections.Generic;
+
+    public class PersonVO : ISupportsHypermedia
     {
         public long Id { get; set; }
         
@@ -11,5 +16,7 @@
         public string Address { get; set; }
         
         public string Gender { get; set; }
+
+        public List<HyperMediaLink> Links { get; set; } = new List<HyperMediaLink>();
     }
 }
