@@ -17,6 +17,13 @@ using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddCors(options => options.AddDefaultPolicy(builder => 
+{
+	builder.AllowAnyOrigin()
+	.AllowAnyMethod()
+	.AllowAnyHeader();
+}));
+
 builder.Services.AddControllers();
 
 var connection = builder.Configuration["MySQLConnection:MySQLConnectionString"];
@@ -79,6 +86,8 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.MapControllerRoute("DefaultApi", "api/{controller}/{id?}");
+
+app.UseCors();
 
 app.UseSwagger();
 
