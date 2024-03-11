@@ -1,8 +1,6 @@
 ﻿namespace ApiEstudo.Model
 {
     using ApiEstudo.Model.Base;
-    using System;
-    using System.ComponentModel.DataAnnotations.Schema;
 
     [Table("books")]
     public class Book : BaseEntity
