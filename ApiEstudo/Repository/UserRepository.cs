@@ -12,7 +12,7 @@
 
         public UserRepository(MysqlContext context)
         {
-            _context = context
+            _context = context;
         }
 
         public User ValidateCredentials(UserVO userVO)
