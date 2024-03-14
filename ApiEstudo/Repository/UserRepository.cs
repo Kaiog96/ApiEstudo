@@ -16,14 +16,14 @@
             _context = context;
         }
 
-        public User ValidateCredentials(UserVO userVO)
+        public User? ValidateCredentials(UserVO userVO)
         {
-            var pass = ComputeHash(userVO.Password, new SHA256CryptoServiceProvider());
+            var pass = ComputeHash(userVO.Password, SHA256.Create());
 
             return _context.Users.FirstOrDefault(u => (u.UserName == userVO.UserName) && (u.Password == pass));
         }
 
-        public User RefreshUserInfo(User user)
+        public User? RefreshUserInfo(User user)
         {
             if (!_context.Users.Any(u => u.Id.Equals(user.Id))) return null;
 
@@ -48,13 +48,20 @@
             return result;
         }
 
-        private string ComputeHash(string input, SHA256CryptoServiceProvider algorithm)
+        private string ComputeHash(string input, HashAlgorithm algorithm)
         {
-            Byte[] inputBytes = Encoding.UTF8.GetBytes(input);
+            byte[] inputBytes = Encoding.UTF8.GetBytes(input);
 
-            Byte[] hashedBytes = algorithm.ComputeHash(inputBytes);
+            byte[] hashedBytes = algorithm.ComputeHash(inputBytes);
 
-            return BitConverter.ToString(hashedBytes);
+            var builder = new StringBuilder();
+
+            foreach (var item in hashedBytes)
+            {
+                builder.Append(item.ToString("x2"));
+            }
+
+            return builder.ToString();
         }
     }
 }

@@ -5,6 +5,8 @@
 
     public interface IUserRepository
     {
-        User ValidateCredentials(UserVO userVO);
+        User? ValidateCredentials(UserVO userVO);
+
+        User? RefreshUserInfo(User user);
     }
 }
