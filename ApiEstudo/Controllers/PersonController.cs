@@ -6,8 +6,8 @@ namespace ApiEstudo.Controllers
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
 
+    [Authorize]
     [ApiController]
-    [Authorize("Bearer")]
     public class PersonController : ControllerBase
     { 
         private readonly ILogger<PersonController> _logger;

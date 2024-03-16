@@ -6,8 +6,8 @@
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
 
+    [Authorize]
     [ApiController]
-    [Authorize("Bearer")]
     public class BookController : ControllerBase
     {
         private readonly ILogger<BookController> _logger;
