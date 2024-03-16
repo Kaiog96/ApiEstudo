@@ -13,7 +13,7 @@
 
         public TokenService(TokenConfiguration configuration)
         {
-            _configuration = configuration;   
+            this._configuration = configuration;   
         }
 
         public string GenerateAcessToken(IEnumerable<Claim> claims)

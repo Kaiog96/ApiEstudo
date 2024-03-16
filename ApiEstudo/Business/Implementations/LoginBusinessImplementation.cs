@@ -2,6 +2,7 @@
 {
     using ApiEstudo.Configurations;
     using ApiEstudo.Data.VO;
+    using ApiEstudo.Model;
     using ApiEstudo.Repository;
     using ApiEstudo.Services;
     using System.IdentityModel.Tokens.Jwt;
@@ -23,7 +24,7 @@
 
         public TokenVO ValidateCredentials(UserVO userCredentials)
         {
-            var user = _userRepository.ValidateCredentials(userCredentials);
+            var user = this._userRepository.ValidateCredentials(userCredentials);
 
             if (user == null) return null;
 
@@ -39,12 +40,43 @@
             user.RefreshToken = refreshToken;
             user.RefreshTokenExpiryTime = DateTime.Now.AddDays(_tokenConfiguration.DaysToExpiry);
 
-            _userRepository.RefreshUserInfo(user);
+            this._userRepository.RefreshUserInfo(user);
 
             DateTime createDate = DateTime.Now;
             DateTime expirationDate = createDate.AddMinutes(_tokenConfiguration.Minutes);
 
             return new TokenVO(true, createDate.ToString(DATE_FORMAT), expirationDate.ToString(DATE_FORMAT), acessToken, refreshToken);
+        }
+
+        public TokenVO ValidateCredentials(TokenVO token)
+        {
+            var acessToken = token.AcessToken;
+            var refreshToken = token.RefreshToken;
+
+            var principal = this._tokenService.GetPrincipalFromExpiredToken(acessToken);
+
+            var username = principal.Identity.Name;
+
+            var user = this._userRepository.ValidateCredentials(username);
+
+            if (user != null || user.RefreshToken != refreshToken || user.RefreshTokenExpiryTime <= DateTime.Now) return null;
+
+            acessToken = this._tokenService.GenerateAcessToken(principal.Claims);
+            refreshToken = this._tokenService.GenerateRefreshToken();
+
+            user.RefreshToken = refreshToken;
+
+            this._userRepository.RefreshUserInfo(user);
+
+            DateTime createDate = DateTime.Now;
+            DateTime expirationDate = createDate.AddMinutes(_tokenConfiguration.Minutes);
+
+            return new TokenVO(true, createDate.ToString(DATE_FORMAT), expirationDate.ToString(DATE_FORMAT), acessToken, refreshToken);
+        }
+
+        public bool RevokeToken(string username)
+        {
+            return this._userRepository.RevokeToken(username);
         }
     }
 }

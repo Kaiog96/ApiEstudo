@@ -3,9 +3,11 @@ namespace ApiEstudo.Controllers
     using ApiEstudo.Business;
     using ApiEstudo.Data.VO;
     using ApiEstudo.Hypermedia.Filters;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
 
     [ApiController]
+    [Authorize("Bearer")]
     public class PersonController : ControllerBase
     { 
         private readonly ILogger<PersonController> _logger;
@@ -13,8 +15,8 @@ namespace ApiEstudo.Controllers
 
         public PersonController(ILogger<PersonController> logger, IPersonBusiness personBusiness)
         {
-            _logger = logger;
-            _personBusiness = personBusiness;
+            this._logger = logger;
+            this._personBusiness = personBusiness;
         }
 
         [HttpGet]

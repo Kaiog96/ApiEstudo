@@ -3,9 +3,11 @@
     using ApiEstudo.Business;
     using ApiEstudo.Data.VO;
     using ApiEstudo.Hypermedia.Filters;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
 
     [ApiController]
+    [Authorize("Bearer")]
     public class BookController : ControllerBase
     {
         private readonly ILogger<BookController> _logger;
@@ -13,8 +15,8 @@
 
         public BookController(ILogger<BookController> logger, IBookBusiness bookBusiness)
         {
-            _logger = logger;
-            _bookBusiness = bookBusiness;
+            this._logger = logger;
+            this._bookBusiness = bookBusiness;
         }
 
         [HttpGet]

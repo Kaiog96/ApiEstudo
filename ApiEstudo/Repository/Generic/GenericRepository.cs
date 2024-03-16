@@ -15,7 +15,7 @@ namespace ApiEstudo.Repository.Generic
 
         public GenericRepository(MysqlContext context)
         {
-            _context = context;
+            this._context = context;
             dataSet = _context.Set<T>();
         }
 

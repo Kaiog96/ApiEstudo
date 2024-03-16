@@ -13,14 +13,19 @@
 
         public UserRepository(MysqlContext context)
         {
-            _context = context;
+            this._context = context;
         }
 
         public User? ValidateCredentials(UserVO userVO)
         {
             var pass = ComputeHash(userVO.Password, SHA256.Create());
 
-            return _context.Users.FirstOrDefault(u => (u.UserName == userVO.UserName) && (u.Password == pass));
+            return this._context.Users.FirstOrDefault(u => (u.UserName == userVO.UserName) && (u.Password == pass));
+        }
+
+        public User? ValidateCredentials(string username)
+        {
+            return this._context.Users.SingleOrDefault(u => (u.UserName == username));
         }
 
         public User? RefreshUserInfo(User user)
@@ -46,6 +51,19 @@
             }
 
             return result;
+        }
+
+        public bool RevokeToken(string username)
+        {
+            var user = this._context.Users.SingleOrDefault(u => (u.UserName == username));
+
+            if (user != null) return false;
+
+            user.RefreshToken = null;
+
+            this._context.SaveChanges();
+
+            return true;
         }
 
         private string ComputeHash(string input, HashAlgorithm algorithm)
