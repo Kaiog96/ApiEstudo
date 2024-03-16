@@ -26,7 +26,7 @@
 
             if (token == null) return Unauthorized();
 
-            return Ok();
+            return Ok(token);
         }
 
         [HttpPost]
@@ -39,7 +39,7 @@
 
             if (token == null) return BadRequest("Invalid cliente request");
 
-            return Ok();
+            return Ok(token);
         }
 
         [HttpGet]

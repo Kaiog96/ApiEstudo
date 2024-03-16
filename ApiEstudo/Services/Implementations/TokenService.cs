@@ -16,7 +16,7 @@
             this._configuration = configuration;   
         }
 
-        public string GenerateAcessToken(IEnumerable<Claim> claims)
+        public string GenerateAccessToken(IEnumerable<Claim> claims)
         {
             var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.Secret));
 

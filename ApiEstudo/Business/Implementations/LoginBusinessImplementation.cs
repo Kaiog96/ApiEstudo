@@ -34,7 +34,7 @@
                 new Claim(JwtRegisteredClaimNames.UniqueName, user.UserName)
             };
 
-            var acessToken = _tokenService.GenerateAcessToken(claims);
+            var accessToken = _tokenService.GenerateAccessToken(claims);
             var refreshToken = _tokenService.GenerateRefreshToken();
 
             user.RefreshToken = refreshToken;
@@ -45,15 +45,15 @@
             DateTime createDate = DateTime.Now;
             DateTime expirationDate = createDate.AddMinutes(_tokenConfiguration.Minutes);
 
-            return new TokenVO(true, createDate.ToString(DATE_FORMAT), expirationDate.ToString(DATE_FORMAT), acessToken, refreshToken);
+            return new TokenVO(true, createDate.ToString(DATE_FORMAT), expirationDate.ToString(DATE_FORMAT), accessToken, refreshToken);
         }
 
         public TokenVO ValidateCredentials(TokenVO token)
         {
-            var acessToken = token.AcessToken;
+            var accessToken = token.AccessToken;
             var refreshToken = token.RefreshToken;
 
-            var principal = this._tokenService.GetPrincipalFromExpiredToken(acessToken);
+            var principal = this._tokenService.GetPrincipalFromExpiredToken(accessToken);
 
             var username = principal.Identity.Name;
 
@@ -61,7 +61,7 @@
 
             if (user != null || user.RefreshToken != refreshToken || user.RefreshTokenExpiryTime <= DateTime.Now) return null;
 
-            acessToken = this._tokenService.GenerateAcessToken(principal.Claims);
+            accessToken = this._tokenService.GenerateAccessToken(principal.Claims);
             refreshToken = this._tokenService.GenerateRefreshToken();
 
             user.RefreshToken = refreshToken;
@@ -71,7 +71,7 @@
             DateTime createDate = DateTime.Now;
             DateTime expirationDate = createDate.AddMinutes(_tokenConfiguration.Minutes);
 
-            return new TokenVO(true, createDate.ToString(DATE_FORMAT), expirationDate.ToString(DATE_FORMAT), acessToken, refreshToken);
+            return new TokenVO(true, createDate.ToString(DATE_FORMAT), expirationDate.ToString(DATE_FORMAT), accessToken, refreshToken);
         }
 
         public bool RevokeToken(string username)
