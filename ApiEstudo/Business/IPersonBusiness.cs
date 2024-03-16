@@ -12,6 +12,8 @@
 
         PersonVO Update(PersonVO personVO);
 
+        PersonVO Disable(long id);
+
         void Delete(long id);
     }
 }

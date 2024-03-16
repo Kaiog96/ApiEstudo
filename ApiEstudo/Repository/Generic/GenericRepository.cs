@@ -9,7 +9,7 @@ namespace ApiEstudo.Repository.Generic
 
     public class GenericRepository<T> : IRepository<T> where T : BaseEntity
     {
-        private MysqlContext _context;
+        protected MysqlContext _context;
 
         private DbSet<T> dataSet;
 
@@ -35,7 +35,7 @@ namespace ApiEstudo.Repository.Generic
             {
                 dataSet.Add(item);
 
-                _context.SaveChanges();
+                this._context.SaveChanges();
 
                 return item;
             }
@@ -53,9 +53,9 @@ namespace ApiEstudo.Repository.Generic
             {
                 try
                 {
-                    _context.Entry(result).CurrentValues.SetValues(item);
+                    this._context.Entry(result).CurrentValues.SetValues(item);
 
-                    _context.SaveChanges();
+                    this._context.SaveChanges();
 
                     return result;
                 }
@@ -79,7 +79,7 @@ namespace ApiEstudo.Repository.Generic
                 {
                     dataSet.Remove(result);
 
-                    _context.SaveChanges();
+                    this._context.SaveChanges();
                 }
                 catch (Exception ex)
                 {
