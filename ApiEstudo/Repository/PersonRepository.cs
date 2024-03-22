@@ -3,6 +3,7 @@
     using ApiEstudo.Model;
     using ApiEstudo.Model.Context;
     using ApiEstudo.Repository.Generic;
+    using System.Collections.Generic;
 
     public class PersonRepository : GenericRepository<Person>, IPersonRepository
     {
@@ -31,6 +32,24 @@
             }
 
             return user;
+        }
+
+        public List<Person> FindByName(string firtsName, string lastName)
+        {
+            if (!string.IsNullOrEmpty(firtsName) && !string.IsNullOrEmpty(lastName))
+            {
+                return this._context.Persons.Where(p => p.FirstName.Contains(firtsName) && p.LastName.Contains(lastName)).ToList();
+            }            
+            else if (string.IsNullOrEmpty(firtsName) && !string.IsNullOrEmpty(lastName))
+            {
+                return this._context.Persons.Where(p => p.LastName.Contains(lastName)).ToList();
+            }
+            else if (!string.IsNullOrEmpty(firtsName) && string.IsNullOrEmpty(lastName))
+            {
+                return this._context.Persons.Where(p => p.FirstName.Contains(firtsName)).ToList();
+            }
+
+            return null;
         }
     }
 }

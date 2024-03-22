@@ -28,7 +28,7 @@
         [TypeFilter (typeof(HyperMediaFilter))]
         public IActionResult Get()
         {
-            return Ok(_bookBusiness.FindAll());
+            return Ok(this._bookBusiness.FindAll());
         }
 
         [HttpGet]
@@ -40,7 +40,7 @@
         [TypeFilter(typeof(HyperMediaFilter))]
         public IActionResult GetFindByID(long id)
         {
-            var book = _bookBusiness.FindByID(id);
+            var book = this._bookBusiness.FindByID(id);
 
             if (book == null) { return NotFound(); }
 
@@ -57,7 +57,7 @@
         {
             if (bookVO == null) { return BadRequest(); }
 
-            return Ok(_bookBusiness.Create(bookVO));
+            return Ok(this._bookBusiness.Create(bookVO));
         }
 
         [HttpPut]
@@ -70,7 +70,7 @@
         {
             if (bookVO == null) { return BadRequest(); }
 
-            return Ok(_bookBusiness.Update(bookVO));
+            return Ok(this._bookBusiness.Update(bookVO));
         }
 
         [HttpDelete]
@@ -80,7 +80,7 @@
         [ProducesResponseType((401))]
         public IActionResult Delete(long id)
         {
-            _bookBusiness.Delete(id);
+            this._bookBusiness.Delete(id);
 
             return NoContent();
         }

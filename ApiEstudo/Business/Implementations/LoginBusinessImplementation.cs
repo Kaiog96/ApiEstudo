@@ -17,9 +17,9 @@
 
         public LoginBusinessImplementation(TokenConfiguration tokenConfiguration, IUserRepository userRepository, ITokenService tokenService)
         {
-            _tokenConfiguration = tokenConfiguration;
-            _userRepository = userRepository;
-            _tokenService = tokenService;
+            this._tokenConfiguration = tokenConfiguration;
+            this._userRepository = userRepository;
+            this._tokenService = tokenService;
         }
 
         public TokenVO ValidateCredentials(UserVO userCredentials)
@@ -34,16 +34,16 @@
                 new Claim(JwtRegisteredClaimNames.UniqueName, user.UserName)
             };
 
-            var accessToken = _tokenService.GenerateAccessToken(claims);
-            var refreshToken = _tokenService.GenerateRefreshToken();
+            var accessToken = this._tokenService.GenerateAccessToken(claims);
+            var refreshToken = this._tokenService.GenerateRefreshToken();
 
             user.RefreshToken = refreshToken;
-            user.RefreshTokenExpiryTime = DateTime.Now.AddDays(_tokenConfiguration.DaysToExpiry);
+            user.RefreshTokenExpiryTime = DateTime.Now.AddDays(this._tokenConfiguration.DaysToExpiry);
 
             this._userRepository.RefreshUserInfo(user);
 
             DateTime createDate = DateTime.Now;
-            DateTime expirationDate = createDate.AddMinutes(_tokenConfiguration.Minutes);
+            DateTime expirationDate = createDate.AddMinutes(this._tokenConfiguration.Minutes);
 
             return new TokenVO(true, createDate.ToString(DATE_FORMAT), expirationDate.ToString(DATE_FORMAT), accessToken, refreshToken);
         }
@@ -69,7 +69,7 @@
             this._userRepository.RefreshUserInfo(user);
 
             DateTime createDate = DateTime.Now;
-            DateTime expirationDate = createDate.AddMinutes(_tokenConfiguration.Minutes);
+            DateTime expirationDate = createDate.AddMinutes(this._tokenConfiguration.Minutes);
 
             return new TokenVO(true, createDate.ToString(DATE_FORMAT), expirationDate.ToString(DATE_FORMAT), accessToken, refreshToken);
         }

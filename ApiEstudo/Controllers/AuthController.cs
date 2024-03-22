@@ -2,7 +2,6 @@
 {
     using ApiEstudo.Business;
     using ApiEstudo.Data.VO;
-    using ApiEstudo.Hypermedia.Filters;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
 
@@ -13,7 +12,7 @@
 
         public AuthController(ILoginBusiness loginBusiness)
         {
-            _loginBusiness = loginBusiness;
+            this._loginBusiness = loginBusiness;
         }
 
         [HttpPost]

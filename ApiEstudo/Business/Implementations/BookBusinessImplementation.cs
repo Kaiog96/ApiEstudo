@@ -13,41 +13,41 @@
 
         public BookBusinessImplementation(IRepository<Book> bookRepository)
         {
-            _bookRepository = bookRepository;
-            _converter = new BookConverter();
+            this._bookRepository = bookRepository;
+            this._converter = new BookConverter();
         }
 
         public List<BookVO> FindAll()
         {
-            return _converter.Parse(_bookRepository.FindAll());
+            return this._converter.Parse(_bookRepository.FindAll());
         }
 
         public BookVO FindByID(long id)
         {
-            return _converter.Parse(_bookRepository.FindByID(id));
+            return this._converter.Parse(_bookRepository.FindByID(id));
         }
 
         public BookVO Create(BookVO bookVO)
         {
-            var bookEntity = _converter.Parse(bookVO);
+            var bookEntity = this._converter.Parse(bookVO);
 
-            bookEntity = _bookRepository.Create(bookEntity);
+            bookEntity = this._bookRepository.Create(bookEntity);
 
-            return _converter.Parse(bookEntity);
+            return this._converter.Parse(bookEntity);
         }
 
         public BookVO Update(BookVO bookVO)
         {
-            var bookEntity = _converter.Parse(bookVO);
+            var bookEntity = this._converter.Parse(bookVO);
 
-            bookEntity = _bookRepository.Update(bookEntity);
+            bookEntity = this._bookRepository.Update(bookEntity);
 
-            return _converter.Parse(bookEntity);
+            return this._converter.Parse(bookEntity);
         }
 
         public void Delete(long id)
         {
-            _bookRepository.Delete(id);
+            this._bookRepository.Delete(id);
         }
     }
 }

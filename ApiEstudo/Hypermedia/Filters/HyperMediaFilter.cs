@@ -23,7 +23,7 @@
         {
             if (context.Result is OkObjectResult objectResult)
             {
-                var enricher = _hyperMediaFilterOptions.ContentResponseEnricherList.FirstOrDefault(x => x.CanEnrich(context));
+                var enricher = this._hyperMediaFilterOptions.ContentResponseEnricherList.FirstOrDefault(x => x.CanEnrich(context));
 
                 if (enricher != null) Task.FromResult(enricher.Enrich(context));
             }

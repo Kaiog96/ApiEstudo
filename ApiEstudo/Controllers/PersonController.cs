@@ -20,15 +20,15 @@ namespace ApiEstudo.Controllers
         }
 
         [HttpGet]
-        [Route("Person", Name = "GetPersons")]
+        [Route("Person/{name}/{sortDirection}/{pageSize}/{page}", Name = "GetPersons")]
         [ProducesResponseType((200), Type = typeof(List<PersonVO>))]
         [ProducesResponseType((204))]
         [ProducesResponseType((400))]
         [ProducesResponseType((401))]
         [TypeFilter(typeof(HyperMediaFilter))]
-        public IActionResult Get()
+        public IActionResult Get(string name, string sortDirection, int pageSize, int page)
         { 
-            return Ok(_personBusiness.FindAll());
+            return Ok(this._personBusiness.FindWithPagedSearch(name, sortDirection, pageSize, page));
         }
 
         [HttpGet]
@@ -40,9 +40,25 @@ namespace ApiEstudo.Controllers
         [TypeFilter(typeof(HyperMediaFilter))]
         public IActionResult GetFindByID(long id)
         {
-            var person = _personBusiness.FindByID(id);
+            var person = this._personBusiness.FindByID(id);
 
             if(person == null) { return NotFound(); }
+
+            return Ok(person);
+        }
+
+        [HttpGet]
+        [Route("Person/FindByName/{firstName}/{lastName}", Name = "GetPersonByName")]
+        [ProducesResponseType((200), Type = typeof(PersonVO))]
+        [ProducesResponseType((204))]
+        [ProducesResponseType((400))]
+        [ProducesResponseType((401))]
+        [TypeFilter(typeof(HyperMediaFilter))]
+        public IActionResult GetFindByName(string firstName, string lastName)
+        {
+            var person = this._personBusiness.FindByName(firstName, lastName);
+
+            if (person == null) { return NotFound(); }
 
             return Ok(person);
         }
@@ -57,7 +73,7 @@ namespace ApiEstudo.Controllers
         {
             if (personVO == null) { return BadRequest(); }
 
-            return Ok(_personBusiness.Create(personVO));
+            return Ok(this._personBusiness.Create(personVO));
         }
         
         [HttpPut]
@@ -70,7 +86,7 @@ namespace ApiEstudo.Controllers
         {
             if (personVO == null) { return BadRequest(); }
 
-            return Ok(_personBusiness.Update(personVO));
+            return Ok(this._personBusiness.Update(personVO));
         }
 
         [HttpPatch]
@@ -82,7 +98,7 @@ namespace ApiEstudo.Controllers
         [TypeFilter(typeof(HyperMediaFilter))]
         public IActionResult Patch(long id)
         {
-            var person = _personBusiness.Disable(id);
+            var person = this._personBusiness.Disable(id);
 
             return Ok(person);
         }
@@ -94,7 +110,7 @@ namespace ApiEstudo.Controllers
         [ProducesResponseType((401))]
         public IActionResult Delete(long id)
         {
-            _personBusiness.Delete(id);
+            this._personBusiness.Delete(id);
 
             return NoContent();
         }
